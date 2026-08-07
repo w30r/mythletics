@@ -1,13 +1,13 @@
 import Link from "next/link"
-import { Flame, Clock, Dumbbell, Activity, ChevronRight, Sparkles } from "lucide-react"
+import { Flame, Clock, Dumbbell, Activity, Sparkles } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { buttonVariants } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { getActiveProgress } from "@/lib/program-progress"
 import { computeStats, formatMinutes } from "@/lib/stats"
 import { dbConnect } from "@/lib/db"
 import { WorkoutSession } from "@/lib/models"
+import { RecentSessions } from "@/components/recent-sessions"
 
 export const dynamic = "force-dynamic"
 
@@ -123,32 +123,14 @@ export default async function DashboardPage() {
           <CardHeader>
             <CardTitle className="text-lg">Recent sessions</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {recent.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No sessions yet. Complete your first workout!</p>
-            ) : (
-              recent.map((s) => (
-                <div key={String(s._id)} className="flex items-center justify-between border-b pb-2 last:border-0">
-                  <div>
-                    <p className="text-sm font-medium">{s.workoutId ? "Workout session" : "Workout session"}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(s.date).toLocaleDateString(undefined, { month: "short", day: "numeric" })} ·{" "}
-                      {formatMinutes(s.duration ?? 0)}
-                    </p>
-                  </div>
-                  {s.rating ? (
-                    <Badge variant="secondary">{s.rating}/10</Badge>
-                  ) : (
-                    <Badge variant="outline">Done</Badge>
-                  )}
-                </div>
-              ))
-            )}
-            {recent.length > 0 ? (
-              <Link href="/progress" className={cn(buttonVariants({ variant: "ghost" }), "w-full justify-between")}>
-                View analytics <ChevronRight className="h-4 w-4" />
-              </Link>
-            ) : null}
+          <CardContent>
+            <RecentSessions
+              items={recent.map((s) => ({
+                _id: String(s._id),
+                meta: `${new Date(s.date).toLocaleDateString(undefined, { month: "short", day: "numeric" })} · ${formatMinutes(s.duration ?? 0)}`,
+                rating: s.rating ?? null,
+              }))}
+            />
           </CardContent>
         </Card>
       </div>

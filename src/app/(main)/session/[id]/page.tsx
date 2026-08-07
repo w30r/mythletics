@@ -2,9 +2,9 @@
 
 import { use, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Pause, Play, SkipForward, RotateCcw, Check, Flag, Volume2, VolumeX, Dumbbell } from "lucide-react"
+import { Pause, Play, SkipForward, RotateCcw, Check, Flag, Volume2, VolumeX, Dumbbell, ListMusic } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { toast } from "sonner"
 import { buildTimeline, formatSeconds, type TimelineStep } from "@/lib/timer"
@@ -33,6 +33,7 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
   const elapsedRef = useRef(0)
   const [splits, setSplits] = useState<SessionSplit[]>([])
   const [bestSplits, setBestSplits] = useState<Map<number, number>>(new Map())
+  const [bestDurations, setBestDurations] = useState<Map<number, number>>(new Map())
   const [rating, setRating] = useState(7)
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -51,13 +52,21 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
       .then((r) => r.json())
       .then((sessions: ClientSession[]) => {
         const best = new Map<number, number>()
+        const durations = new Map<number, number>()
         for (const s of sessions) {
-          for (const sp of s.splits ?? []) {
-            const cur = best.get(sp.stepIndex)
-            if (cur == null || sp.elapsed < cur) best.set(sp.stepIndex, sp.elapsed)
+          const ordered = (s.splits ?? []).sort((a, b) => a.stepIndex - b.stepIndex)
+          let prevElapsed = 0
+          for (const sp of ordered) {
+            const cum = best.get(sp.stepIndex)
+            if (cum == null || sp.elapsed < cum) best.set(sp.stepIndex, sp.elapsed)
+            const dur = Math.max(0, sp.elapsed - prevElapsed)
+            const d = durations.get(sp.stepIndex)
+            if (d == null || dur < d) durations.set(sp.stepIndex, dur)
+            prevElapsed = sp.elapsed
           }
         }
         setBestSplits(best)
+        setBestDurations(durations)
       })
       .catch(() => {})
   }, [id])
@@ -323,12 +332,17 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
                 Target <span className="font-medium text-foreground">{formatSeconds(bestSplits.get(stepIndex)!)}</span>
               </p>
             )}
+            {bestDurations.has(stepIndex) && (
+              <p className="text-sm text-muted-foreground">
+                PB duration <span className="font-medium text-foreground">{formatSeconds(bestDurations.get(stepIndex)!)}</span>
+              </p>
+            )}
           </div>
 
           <div className="flex items-center justify-center gap-2 sm:gap-3">
             {current?.isRepBased ? (
               <Button size="lg" onClick={completeRep} className="min-h-12 flex-1">
-                <Check className="h-5 w-5" /> Complete set
+                <Check className="h-5 w-5" /> Complete
               </Button>
             ) : (
               <Button variant="outline" size="icon-lg" onClick={pause} className="min-h-12 min-w-12">
@@ -370,6 +384,55 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
               <RotateCcw className="h-4 w-4" /> Restart
             </Button>
           </div>
+        </Card>
+      )}
+
+      {(phase === "running" || phase === "paused") && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <ListMusic className="h-5 w-5 text-primary" /> Playlist
+            </CardTitle>
+            <CardDescription>
+              {steps.length - stepIndex} remaining
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="max-h-72 space-y-1.5 overflow-y-auto pr-2">
+            {steps.slice(stepIndex).map((st, i) => {
+              const isCurrent = i === 0
+              return (
+                <div
+                  key={st.id}
+                  className={cn(
+                    "flex items-center justify-between rounded-lg border px-3 py-2",
+                    isCurrent ? "border-primary/40 bg-primary/5" : "border-border/60"
+                  )}
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span
+                      className={cn(
+                        "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums",
+                        isCurrent ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                      )}
+                    >
+                      {stepIndex + i + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">{st.exerciseName ?? st.label}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {st.kind === "rest"
+                          ? `${formatSeconds(st.durationSec ?? 0)} rest`
+                          : `Round ${st.round}/${st.roundsTotal}`}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="ml-3 shrink-0 text-sm font-semibold tabular-nums">
+                    {st.isRepBased ? `${st.reps} reps` : formatSeconds(st.durationSec ?? 0)}
+                  </span>
+                </div>
+              )
+            })}
+          </CardContent>
         </Card>
       )}
 
