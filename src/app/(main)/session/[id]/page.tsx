@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { toast } from "sonner"
 import { buildTimeline, formatSeconds, type TimelineStep } from "@/lib/timer"
 import { countdownBeep, endBeep, ensureAudio, speak, startBeep, stopSpeech } from "@/lib/audio"
-import type { ClientWorkout, SessionDetail } from "@/lib/client-types"
+import type { ClientWorkout, ClientSession, SessionDetail, SessionSplit } from "@/lib/client-types"
 import { cn } from "@/lib/utils"
 
 type Phase = "idle" | "running" | "paused" | "finished"
@@ -30,6 +30,9 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
   const [doneReps, setDoneReps] = useState<Set<string>>(new Set())
   const [doneSteps, setDoneSteps] = useState<Set<string>>(new Set())
   const secondsLeftRef = useRef(0)
+  const elapsedRef = useRef(0)
+  const [splits, setSplits] = useState<SessionSplit[]>([])
+  const [bestSplits, setBestSplits] = useState<Map<number, number>>(new Map())
   const [rating, setRating] = useState(7)
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -41,6 +44,22 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
     fetch(`/api/workouts/${id}`)
       .then((r) => r.json())
       .then(setWorkout)
+  }, [id])
+
+  useEffect(() => {
+    fetch(`/api/sessions?workoutId=${id}&limit=100`)
+      .then((r) => r.json())
+      .then((sessions: ClientSession[]) => {
+        const best = new Map<number, number>()
+        for (const s of sessions) {
+          for (const sp of s.splits ?? []) {
+            const cur = best.get(sp.stepIndex)
+            if (cur == null || sp.elapsed < cur) best.set(sp.stepIndex, sp.elapsed)
+          }
+        }
+        setBestSplits(best)
+      })
+      .catch(() => {})
   }, [id])
 
   const cue = useCallback(
@@ -64,6 +83,21 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
   }, [])
 
   const advance = useCallback(() => {
+    const leaving = steps[stepIndex]
+    if (leaving) {
+      setSplits((prev) => [
+        ...prev,
+        {
+          stepIndex,
+          blockIndex: leaving.blockIndex,
+          round: leaving.round,
+          exerciseId: leaving.exerciseId,
+          exerciseName: leaving.exerciseName,
+          reps: leaving.reps,
+          elapsed: elapsedRef.current,
+        },
+      ])
+    }
     if (stepIndex >= steps.length - 1) {
       finish()
       return
@@ -80,6 +114,8 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
     await ensureAudio()
     setPhase("running")
     setElapsed(0)
+    elapsedRef.current = 0
+    setSplits([])
     setStepIndex(0)
     const duration = steps[0]?.durationSec ?? 0
     secondsLeftRef.current = duration
@@ -120,6 +156,8 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
     setPhase("idle")
     setStepIndex(0)
     setElapsed(0)
+    elapsedRef.current = 0
+    setSplits([])
     const duration = steps[0]?.durationSec ?? 0
     secondsLeftRef.current = duration
     setSecondsLeft(duration)
@@ -135,6 +173,7 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
       secondsLeftRef.current = next
       setSecondsLeft(next)
       setElapsed((e) => e + 1)
+      elapsedRef.current += 1
       if (!current || current.isRepBased) return
       if (next === 0) {
         if (current.kind === "work") setDoneSteps((prev) => new Set(prev).add(current.id))
@@ -182,12 +221,14 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           workoutId: workout?._id,
+          workoutName: workout?.name,
           duration: elapsed,
           completed: true,
           source: fromProgram ? "program" : "manual",
           programId: programId ?? undefined,
           rating,
           details,
+          splits,
         }),
       })
       const data = await res.json()
@@ -250,7 +291,13 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
 
       {phase === "running" && (
         <Card className="select-none p-4 sm:p-6">
-          <Progress value={((stepIndex + 1) / steps.length) * 100} className="mb-6" />
+          <Progress value={((stepIndex + 1) / steps.length) * 100} className="mb-4" />
+
+          <div className="mb-4 text-center">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Elapsed</p>
+            <p className="text-6xl font-bold tabular-nums tracking-tight sm:text-7xl">{formatSeconds(elapsed)}</p>
+          </div>
+
           <div className="mb-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
             <span className="text-muted-foreground">
               Step {stepIndex + 1}/{steps.length}
@@ -264,12 +311,17 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
           </div>
 
           <div className="mb-6 text-center">
-            <h2 className="text-xl font-semibold sm:text-2xl">{current?.exerciseName ?? current?.label}</h2>
+            <h2 className="text-2xl font-semibold sm:text-3xl">{current?.exerciseName ?? current?.label}</h2>
             <p className="text-sm text-muted-foreground">{current?.kind === "rest" ? "Rest" : current?.label}</p>
             {current?.isRepBased ? (
-              <p className="mt-2 text-6xl font-bold tabular-nums text-primary">{current?.reps} reps</p>
+              <p className="mt-2 text-3xl font-bold tabular-nums text-primary sm:text-4xl">{current?.reps} reps</p>
             ) : (
-              <p className="mt-2 text-6xl font-bold tabular-nums text-primary">{formatSeconds(secondsLeft)}</p>
+              <p className="mt-2 text-3xl font-bold tabular-nums text-primary sm:text-4xl">{formatSeconds(secondsLeft)}</p>
+            )}
+            {bestSplits.has(stepIndex) && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Target <span className="font-medium text-foreground">{formatSeconds(bestSplits.get(stepIndex)!)}</span>
+              </p>
             )}
           </div>
 
@@ -301,7 +353,6 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
               <RotateCcw className="h-5 w-5" />
             </Button>
           </div>
-          <p className="mt-4 text-center text-sm text-muted-foreground">Elapsed {formatSeconds(elapsed)}</p>
         </Card>
       )}
 
@@ -336,9 +387,9 @@ export default function SessionPlayerPage({ params }: { params: Promise<{ id: st
 
           {!saved ? (
             <div className="space-y-4">
-              <div>
+              <div className="text-center">
                 <p className="mb-2 text-sm font-medium">How did it feel?</p>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap justify-center gap-1.5">
                   {[...Array(11)].map((_, i) => (
                     <button
                       key={i}

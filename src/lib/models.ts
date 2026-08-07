@@ -115,10 +115,24 @@ const sessionDetailSchema = new Schema(
   { _id: false }
 )
 
+const sessionSplitSchema = new Schema(
+  {
+    stepIndex: { type: Number, required: true },
+    blockIndex: { type: Number, required: true },
+    round: { type: Number, required: true },
+    exerciseId: { type: Schema.Types.ObjectId, ref: "Exercise" },
+    exerciseName: { type: String, default: "" },
+    reps: { type: Number },
+    elapsed: { type: Number, required: true },
+  },
+  { _id: false }
+)
+
 const workoutSessionSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     workoutId: { type: Schema.Types.ObjectId, ref: "Workout" },
+    workoutName: { type: String, default: "" },
     date: { type: Date, default: Date.now },
     duration: { type: Number, default: 0 },
     completed: { type: Boolean, default: true },
@@ -126,6 +140,7 @@ const workoutSessionSchema = new Schema(
     programId: { type: Schema.Types.ObjectId, ref: "Program" },
     rating: { type: Number, min: 0, max: 10 },
     details: { type: [sessionDetailSchema], default: [] },
+    splits: { type: [sessionSplitSchema], default: [] },
   },
   { timestamps: true }
 )

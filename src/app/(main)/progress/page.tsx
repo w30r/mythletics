@@ -1,8 +1,10 @@
-import { Flame, Clock, Dumbbell, Activity, CalendarCheck, Timer } from "lucide-react"
+import { Flame, Clock, Dumbbell, Activity, CalendarCheck, Timer, Trophy, ListChecks } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { computeStats, formatMinutes } from "@/lib/stats"
+import { formatSeconds } from "@/lib/timer"
 import { VolumeChart } from "@/components/volume-chart"
+import { SplitHistory } from "@/components/split-history"
 
 export const dynamic = "force-dynamic"
 
@@ -118,6 +120,56 @@ export default async function ProgressPage() {
               </table>
             </div>
           )}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Trophy className="h-5 w-5 text-primary" /> Workout personal bests
+          </CardTitle>
+          <CardDescription>Fastest total completion time per workout</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {stats.workoutPbs.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              Complete a guided workout to start tracking completion-time PBs.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b text-left text-muted-foreground">
+                    <th className="py-2 pr-4 font-medium">Workout</th>
+                    <th className="py-2 pr-4 font-medium">Best time</th>
+                    <th className="py-2 font-medium">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stats.workoutPbs.map((pb) => (
+                    <tr key={pb.workoutId} className="border-b last:border-0">
+                      <td className="py-2 pr-4 font-medium">{pb.workoutName}</td>
+                      <td className="py-2 pr-4">
+                        <Badge variant="secondary">{formatSeconds(pb.bestTime)}</Badge>
+                      </td>
+                      <td className="py-2 text-muted-foreground">{pb.date.toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <ListChecks className="h-5 w-5 text-primary" /> Split history
+          </CardTitle>
+          <CardDescription>Fastest time to reach each round and exercise</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SplitHistory workouts={stats.workoutSplits} />
         </CardContent>
       </Card>
     </div>

@@ -68,7 +68,7 @@ export default function WorkoutDetailPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24 md:pb-0">
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon-sm" onClick={() => router.push("/workouts")}>
           <ArrowLeft className="h-4 w-4" />
@@ -95,6 +95,15 @@ export default function WorkoutDetailPage({ params }: { params: Promise<{ id: st
         ))}
       </div>
 
+      <div className="fixed inset-x-0 bottom-0 z-10 border-t bg-background/95 p-4 backdrop-blur md:static md:z-auto md:border-0 md:bg-transparent md:p-0">
+        <a
+          href={`/session/${workout._id}`}
+          className={cn(buttonVariants({ size: "lg" }), "w-full md:w-auto")}
+        >
+          <Play className="h-4 w-4" /> Start guided session
+        </a>
+      </div>
+
       <div className="space-y-4">
         {workout.blocks.map((block, bi) => {
           if (block.type === "rest") {
@@ -114,8 +123,9 @@ export default function WorkoutDetailPage({ params }: { params: Promise<{ id: st
                 <Badge>{block.type === "interval" ? "Interval" : "Circuit"}</Badge>
                 <span className="font-medium">{block.name || `Block ${bi + 1}`}</span>
                 <span className="text-sm text-muted-foreground">
-                  {block.rounds} round{block.rounds !== 1 ? "s" : ""}
-                  {block.restBetweenRounds ? ` · ${block.restBetweenRounds}s between rounds` : ""}
+                  {(block.rounds ?? 1) > 1 ? `${block.rounds ?? 1} rounds` : ""}
+                  {(block.rounds ?? 1) > 1 && block.restBetweenRounds ? " · " : ""}
+                  {block.restBetweenRounds ? `${block.restBetweenRounds}s between rounds` : ""}
                 </span>
               </div>
               <div className="divide-y">
@@ -137,13 +147,6 @@ export default function WorkoutDetailPage({ params }: { params: Promise<{ id: st
           )
         })}
       </div>
-
-      <a
-        href={`/session/${workout._id}`}
-        className={cn(buttonVariants({ size: "lg" }), "w-full sm:w-auto")}
-      >
-        <Play className="h-4 w-4" /> Start guided session
-      </a>
     </div>
   )
 }

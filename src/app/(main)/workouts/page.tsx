@@ -26,6 +26,7 @@ export default function WorkoutsPage() {
   const [reload, setReload] = useState(0)
   const [q, setQ] = useState("")
   const [muscle, setMuscle] = useState("")
+  const [tag, setTag] = useState("")
 
   useEffect(() => {
     let cancelled = false
@@ -58,6 +59,17 @@ export default function WorkoutsPage() {
     return [...new Set(exercises.flatMap((e) => e.muscleGroups))].sort()
   }, [exercises])
 
+  const exerciseMap = useMemo(() => {
+    const m = new Map<string, ClientExercise>()
+    for (const e of exercises ?? []) m.set(e._id, e)
+    return m
+  }, [exercises])
+
+  const tagOptions = useMemo(() => {
+    if (!workouts) return []
+    return [...new Set(workouts.flatMap((w) => w.tags ?? []))].sort()
+  }, [workouts])
+
   const filteredExercises = useMemo(() => {
     if (!exercises) return []
     return exercises.filter((e) => {
@@ -69,8 +81,12 @@ export default function WorkoutsPage() {
 
   const filteredWorkouts = useMemo(() => {
     if (!workouts) return []
-    return workouts.filter((w) => !q || w.name.toLowerCase().includes(q.toLowerCase()))
-  }, [workouts, q])
+    return workouts.filter((w) => {
+      const matchQ = !q || w.name.toLowerCase().includes(q.toLowerCase())
+      const matchTag = !tag || w.tags?.includes(tag)
+      return matchQ && matchTag
+    })
+  }, [workouts, q, tag])
 
   async function deleteWorkout(id: string) {
     if (!confirm("Delete this workout?")) return
@@ -124,6 +140,18 @@ export default function WorkoutsPage() {
         </TabsList>
 
         <TabsContent value="workouts" className="pt-4">
+          {tagOptions.length > 0 && (
+            <div className="mb-4 flex flex-wrap gap-2">
+              <Button variant={tag === "" ? "secondary" : "ghost"} size="sm" onClick={() => setTag("")}>
+                All
+              </Button>
+              {tagOptions.map((t) => (
+                <Button key={t} variant={tag === t ? "secondary" : "ghost"} size="sm" onClick={() => setTag(t)}>
+                  {t.charAt(0).toUpperCase() + t.slice(1)}
+                </Button>
+              ))}
+            </div>
+          )}
           {!workouts ? (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[...Array(6)].map((_, i) => (
@@ -134,40 +162,9 @@ export default function WorkoutsPage() {
             <EmptyState />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredWorkouts.map((w) => {
-                const exerciseCount = w.blocks.reduce((a, b) => a + b.exercises.length, 0)
-                return (
-                  <Card key={w._id} className="group relative">
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      className="absolute right-2 top-2 text-muted-foreground transition-opacity sm:opacity-0 sm:group-hover:opacity-100"
-                      onClick={() => deleteWorkout(w._id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                    <Link href={`/workout/${w._id}`}>
-                      <CardHeader>
-                        <CardTitle className="pr-12 text-base">{w.name}</CardTitle>
-                        <CardDescription className="line-clamp-2">{w.description || "No description"}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Badge variant="secondary">
-                            {w.blocks.length} block{w.blocks.length !== 1 ? "s" : ""}
-                          </Badge>
-                          <Badge variant="outline">{exerciseCount} exercises</Badge>
-                          {w.tags?.slice(0, 2).map((t) => (
-                            <Badge key={t} variant="outline">
-                              {t}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Link>
-                  </Card>
-                )
-              })}
+              {filteredWorkouts.map((w) => (
+                <WorkoutCard key={w._id} workout={w} exerciseMap={exerciseMap} onDelete={() => deleteWorkout(w._id)} />
+              ))}
             </div>
           )}
         </TabsContent>
@@ -231,6 +228,74 @@ export default function WorkoutsPage() {
         </TabsContent>
       </Tabs>
     </div>
+  )
+}
+
+function WorkoutCard({
+  workout,
+  exerciseMap,
+  onDelete,
+}: {
+  workout: ClientWorkout
+  exerciseMap: Map<string, ClientExercise>
+  onDelete: () => void
+}) {
+  const exerciseCount = workout.blocks.reduce((a, b) => a + b.exercises.length, 0)
+  const totalRounds = workout.blocks.reduce((a, b) => a + (b.rounds ?? 1), 0)
+  const muscleSet = new Set<string>()
+  let timedCount = 0
+  let repCount = 0
+  for (const block of workout.blocks) {
+    for (const ex of block.exercises) {
+      const m = exerciseMap.get(ex.exerciseId)
+      m?.muscleGroups.forEach((mg) => muscleSet.add(mg))
+      if (ex.duration) timedCount += 1
+      if (ex.reps) repCount += 1
+    }
+  }
+  const muscleParts = [...muscleSet].slice(0, 3)
+
+  return (
+    <Card className="group relative">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        className="absolute right-2 top-2 text-muted-foreground transition-opacity sm:opacity-0 sm:group-hover:opacity-100"
+        onClick={onDelete}
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
+      <Link href={`/workout/${workout._id}`}>
+        <CardHeader>
+          <CardTitle className="pr-12 text-base">{workout.name}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="secondary">
+              {totalRounds} round{totalRounds !== 1 ? "s" : ""}
+            </Badge>
+            <Badge variant="outline">{exerciseCount} exercises</Badge>
+            {repCount > 0 && (
+              <Badge variant="outline">
+                {repCount} rep-based
+              </Badge>
+            )}
+            {timedCount > 0 && (
+              <Badge variant="outline">{timedCount} timed</Badge>
+            )}
+          </div>
+          {muscleParts.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {muscleParts.map((m) => (
+                <Badge key={m} variant="outline" className="text-xs">
+                  {m}
+                </Badge>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Link>
+    </Card>
   )
 }
 

@@ -91,9 +91,20 @@ export type SessionDetail = {
   completed: boolean
 }
 
+export type SessionSplit = {
+  stepIndex: number
+  blockIndex: number
+  round: number
+  exerciseId?: string
+  exerciseName?: string
+  reps?: number
+  elapsed: number
+}
+
 export type ClientSession = {
   _id: string
   workoutId?: string
+  workoutName?: string
   date: string
   duration: number
   completed: boolean
@@ -101,6 +112,7 @@ export type ClientSession = {
   programId?: string
   rating?: number
   details: SessionDetail[]
+  splits?: SessionSplit[]
 }
 
 export type Stats = {
@@ -117,5 +129,22 @@ export type Stats = {
     maxWeight?: number
     maxDuration?: number
     totalCount: number
+  }[]
+  workoutPbs: {
+    workoutId: string
+    workoutName: string
+    bestTime: number
+    date: string
+  }[]
+  workoutSplits: {
+    workoutId: string
+    workoutName: string
+    splits: {
+      stepIndex: number
+      exerciseName: string
+      reps?: number
+      round: number
+      elapsed: number
+    }[]
   }[]
 }

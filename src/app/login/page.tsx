@@ -1,8 +1,8 @@
 "use client"
 
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import { useSearchParams } from "next/navigation"
-import { Dumbbell } from "lucide-react"
+import { Dumbbell, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,6 +12,7 @@ function LoginForm() {
   const searchParams = useSearchParams()
   const next = searchParams.get("next")?.startsWith("/") && !searchParams.get("next")?.startsWith("//") ? searchParams.get("next")! : "/"
   const error = searchParams.get("error")
+  const [loading, setLoading] = useState(false)
 
   return (
     <Card className="w-full max-w-sm">
@@ -23,7 +24,7 @@ function LoginForm() {
         <CardDescription>Sign in to your training account</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action="/api/auth/login" method="post" className="space-y-4">
+        <form action="/api/auth/login" method="post" className="space-y-4" onSubmit={() => setLoading(true)}>
           <input type="hidden" name="next" value={next} />
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
@@ -38,8 +39,9 @@ function LoginForm() {
               Invalid email or password. Try again.
             </p>
           ) : null}
-          <Button type="submit" className="w-full">
-            Sign in
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            {loading ? "Signing in..." : "Sign in"}
           </Button>
         </form>
       </CardContent>

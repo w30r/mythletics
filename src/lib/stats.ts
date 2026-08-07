@@ -16,11 +16,30 @@ export type Stats = {
     maxDuration?: number
     totalCount: number
   }[]
+  workoutPbs: {
+    workoutId: string
+    workoutName: string
+    bestTime: number
+    date: Date
+  }[]
+  workoutSplits: {
+    workoutId: string
+    workoutName: string
+    splits: {
+      stepIndex: number
+      exerciseName: string
+      reps?: number
+      round: number
+      elapsed: number
+    }[]
+  }[]
 }
 
 export async function computeStats(userId: string): Promise<Stats> {
   await dbConnect()
-  const sessions = await WorkoutSession.find({ userId, completed: true }).select("date duration details").lean()
+  const sessions = await WorkoutSession.find({ userId, completed: true })
+    .select("workoutId workoutName date duration details splits")
+    .lean()
 
   const totalSessions = sessions.length
   const totalTime = sessions.reduce((a, s) => a + (s.duration ?? 0), 0)
@@ -83,7 +102,55 @@ export async function computeStats(userId: string): Promise<Stats> {
     }
   }
 
-  return { totalSessions, totalTime, totalReps, streak, thisWeekSessions, thisWeekTime, daily, prs }
+  const pbMap = new Map<string, { workoutId: string; workoutName: string; bestTime: number; date: Date }>()
+  const bestSplitMap = new Map<string, { workoutId: string; workoutName: string; splits: Map<number, { stepIndex: number; exerciseName: string; reps?: number; round: number; elapsed: number }> }>()
+  for (const s of sessions) {
+    const workoutId = String(s.workoutId ?? "")
+    const duration = s.duration ?? 0
+    if (workoutId && duration > 0) {
+      const cur = pbMap.get(workoutId)
+      if (!cur || duration < cur.bestTime) {
+        pbMap.set(workoutId, { workoutId, workoutName: s.workoutName || "", bestTime: duration, date: s.date })
+      }
+    }
+    if (workoutId && (s.splits?.length ?? 0) > 0) {
+      let entry = bestSplitMap.get(workoutId)
+      if (!entry) {
+        entry = { workoutId, workoutName: s.workoutName || "", splits: new Map() }
+        bestSplitMap.set(workoutId, entry)
+      }
+      if (s.workoutName) entry.workoutName = s.workoutName
+      for (const sp of s.splits ?? []) {
+        const cur = entry.splits.get(sp.stepIndex)
+        if (!cur || sp.elapsed < cur.elapsed) {
+          entry.splits.set(sp.stepIndex, {
+            stepIndex: sp.stepIndex,
+            exerciseName: sp.exerciseName || "",
+            reps: sp.reps,
+            round: sp.round,
+            elapsed: sp.elapsed,
+          })
+        }
+      }
+    }
+  }
+
+  const workoutPbs = [...pbMap.values()]
+    .sort((a, b) => a.bestTime - b.bestTime)
+    .map((p) => ({
+      workoutId: p.workoutId,
+      workoutName: p.workoutName || p.workoutId,
+      bestTime: p.bestTime,
+      date: p.date,
+    }))
+
+  const workoutSplits = [...bestSplitMap.values()].map((e) => ({
+    workoutId: e.workoutId,
+    workoutName: e.workoutName || e.workoutId,
+    splits: [...e.splits.values()].sort((a, b) => a.stepIndex - b.stepIndex),
+  }))
+
+  return { totalSessions, totalTime, totalReps, streak, thisWeekSessions, thisWeekTime, daily, prs, workoutPbs, workoutSplits }
 }
 
 function computeStreak(dates: Date[]): number {

@@ -15,8 +15,19 @@ const detailSchema = z.object({
   completed: z.boolean().default(true),
 })
 
+const splitSchema = z.object({
+  stepIndex: z.number(),
+  blockIndex: z.number(),
+  round: z.number(),
+  exerciseId: z.string().optional(),
+  exerciseName: z.string().default(""),
+  reps: z.number().optional(),
+  elapsed: z.number(),
+})
+
 const sessionSchema = z.object({
   workoutId: z.string().optional(),
+  workoutName: z.string().default(""),
   date: z.string().datetime().optional(),
   duration: z.number().min(0).default(0),
   completed: z.boolean().default(true),
@@ -24,6 +35,7 @@ const sessionSchema = z.object({
   programId: z.string().optional(),
   rating: z.number().min(0).max(10).optional(),
   details: z.array(detailSchema).default([]),
+  splits: z.array(splitSchema).default([]),
 })
 
 export async function GET(req: NextRequest) {
