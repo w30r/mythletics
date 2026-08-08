@@ -1,0 +1,339 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-08T00:00:00Z",
+  "title": "Design System: Mythletics",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Foundry Gold",
+        "canonical": "oklch(0.72 0.12 78)",
+        "tonalRamp": [
+          "oklch(0.15 0.12 78)",
+          "oklch(0.25 0.12 78)",
+          "oklch(0.35 0.12 78)",
+          "oklch(0.45 0.12 78)",
+          "oklch(0.55 0.12 78)",
+          "oklch(0.65 0.12 78)",
+          "oklch(0.75 0.12 78)",
+          "oklch(0.85 0.12 78)"
+        ]
+      },
+      "primary-foreground": {
+        "role": "primary-foreground",
+        "displayName": "Gold Dark",
+        "canonical": "oklch(0.16 0.01 80)",
+        "tonalRamp": [
+          "oklch(0.10 0.01 80)",
+          "oklch(0.18 0.01 80)",
+          "oklch(0.26 0.01 80)",
+          "oklch(0.34 0.01 80)",
+          "oklch(0.42 0.01 80)",
+          "oklch(0.50 0.01 80)",
+          "oklch(0.58 0.01 80)",
+          "oklch(0.66 0.01 80)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Near-Black Paper",
+        "canonical": "oklch(0.135 0.005 85)",
+        "tonalRamp": [
+          "oklch(0.08 0.005 85)",
+          "oklch(0.15 0.005 85)",
+          "oklch(0.22 0.005 85)",
+          "oklch(0.30 0.005 85)",
+          "oklch(0.40 0.005 85)",
+          "oklch(0.55 0.005 85)",
+          "oklch(0.70 0.005 85)",
+          "oklch(0.90 0.005 85)"
+        ]
+      },
+      "foreground": {
+        "role": "foreground",
+        "displayName": "Off-White Ink",
+        "canonical": "oklch(0.97 0.004 90)",
+        "tonalRamp": [
+          "oklch(0.15 0.004 90)",
+          "oklch(0.30 0.004 90)",
+          "oklch(0.45 0.004 90)",
+          "oklch(0.60 0.004 90)",
+          "oklch(0.72 0.004 90)",
+          "oklch(0.82 0.004 90)",
+          "oklch(0.90 0.004 90)",
+          "oklch(0.97 0.004 90)"
+        ]
+      },
+      "popover": {
+        "role": "neutral",
+        "displayName": "Warm Popover",
+        "canonical": "oklch(0.155 0.005 85)",
+        "tonalRamp": [
+          "oklch(0.08 0.005 85)",
+          "oklch(0.15 0.005 85)",
+          "oklch(0.22 0.005 85)",
+          "oklch(0.30 0.005 85)",
+          "oklch(0.40 0.005 85)",
+          "oklch(0.55 0.005 85)",
+          "oklch(0.70 0.005 85)",
+          "oklch(0.90 0.005 85)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Ink Grey",
+        "canonical": "oklch(0.205 0.006 85)",
+        "tonalRamp": [
+          "oklch(0.10 0.006 85)",
+          "oklch(0.18 0.006 85)",
+          "oklch(0.25 0.006 85)",
+          "oklch(0.33 0.006 85)",
+          "oklch(0.42 0.006 85)",
+          "oklch(0.55 0.006 85)",
+          "oklch(0.70 0.006 85)",
+          "oklch(0.88 0.006 85)"
+        ]
+      },
+      "muted-foreground": {
+        "role": "muted-foreground",
+        "displayName": "De-emphasised Text",
+        "canonical": "oklch(0.62 0.008 85)",
+        "tonalRamp": [
+          "oklch(0.15 0.008 85)",
+          "oklch(0.28 0.008 85)",
+          "oklch(0.38 0.008 85)",
+          "oklch(0.48 0.008 85)",
+          "oklch(0.55 0.008 85)",
+          "oklch(0.65 0.008 85)",
+          "oklch(0.78 0.008 85)",
+          "oklch(0.92 0.008 85)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline Border",
+        "canonical": "oklch(0.26 0.006 85)",
+        "tonalRamp": [
+          "oklch(0.10 0.006 85)",
+          "oklch(0.18 0.006 85)",
+          "oklch(0.25 0.006 85)",
+          "oklch(0.33 0.006 85)",
+          "oklch(0.42 0.006 85)",
+          "oklch(0.55 0.006 85)",
+          "oklch(0.70 0.006 85)",
+          "oklch(0.88 0.006 85)"
+        ]
+      },
+      "input": {
+        "role": "neutral",
+        "displayName": "Input Stroke",
+        "canonical": "oklch(0.3 0.006 85)",
+        "tonalRamp": [
+          "oklch(0.12 0.006 85)",
+          "oklch(0.20 0.006 85)",
+          "oklch(0.28 0.006 85)",
+          "oklch(0.36 0.006 85)",
+          "oklch(0.45 0.006 85)",
+          "oklch(0.58 0.006 85)",
+          "oklch(0.72 0.006 85)",
+          "oklch(0.90 0.006 85)"
+        ]
+      },
+      "destructive": {
+        "role": "destructive",
+        "displayName": "Destructive Red",
+        "canonical": "oklch(0.637 0.208 25)",
+        "tonalRamp": [
+          "oklch(0.18 0.208 25)",
+          "oklch(0.28 0.208 25)",
+          "oklch(0.38 0.208 25)",
+          "oklch(0.48 0.208 25)",
+          "oklch(0.55 0.208 25)",
+          "oklch(0.65 0.208 25)",
+          "oklch(0.75 0.208 25)",
+          "oklch(0.88 0.208 25)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headlines, display numbers, the giant weighted letterform. Bodoni Moda variable weight 100–900."
+      },
+      "heading": {
+        "displayName": "Heading",
+        "purpose": "Card titles, section headings. Same Bodoni Moda face at smaller scale."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descriptive text, card content, explanations. Geist, neutral and quiet."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Section indices (01, 02), axis labels, navigation text. Geist Mono, uppercase, tracked."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Status bars, weight readouts, fine metadata. Geist Mono, smaller than label."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for state transitions — button hover, nav color shifts, opacity fades."
+      },
+      {
+        "name": "morph-weight",
+        "value": "cubic-bezier(0.33, 0, 0.2, 1) 200ms",
+        "purpose": "Font-weight morph transition on the SpecimenHero letterform when the axis slider changes. The letter smoothly re-weights itself."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Gold-filled action button for primary tasks. Geist Mono, uppercase, tracked.",
+      "html": "<button class=\"ds-btn-primary\">START SESSION</button>",
+      "css": ".ds-btn-primary { background: var(--primary, oklch(0.72 0.12 78)); color: var(--primary-foreground, oklch(0.16 0.01 80)); padding: 8px 24px; border: none; border-radius: 0; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.2em; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s; outline: none; } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary, oklch(0.72 0.12 78)), transparent 15%); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ring, oklch(0.72 0.12 78)); outline-offset: 2px; } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Borderless, transparent button for secondary and navigation actions.",
+      "html": "<button class=\"ds-btn-ghost\">WORKOUT LIBRARY</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: var(--foreground, oklch(0.97 0.004 90)); padding: 8px 24px; border: 1px solid transparent; border-radius: 0; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.2em; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); outline: none; } .ds-btn-ghost:hover { background: var(--muted, oklch(0.205 0.006 85)); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--ring, oklch(0.72 0.12 78)); outline-offset: 2px; } .ds-btn-ghost:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Text input with hairline stroke, sharp corners, no fill decoration.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Search workouts...\" />",
+      "css": ".ds-input { background: var(--input, oklch(0.3 0.006 85)); color: var(--foreground, oklch(0.97 0.004 90)); padding: 8px 12px; border: 1px solid var(--border, oklch(0.26 0.006 85)); border-radius: 0; font-family: 'Geist', system-ui, sans-serif; font-size: 0.875rem; outline: none; transition: border-color 0.2s; } .ds-input::placeholder { color: var(--muted-foreground, oklch(0.62 0.008 85)); } .ds-input:focus-visible { border-color: var(--ring, oklch(0.72 0.12 78)); outline: 2px solid var(--ring, oklch(0.72 0.12 78)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Sidebar navigation link. Mono-caps tracked text, gold active state with left border and dot.",
+      "html": "<a class=\"ds-nav-link ds-nav-link--active\" href=\"/\">Dashboard</a>",
+      "css": ".ds-nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-left: 1px solid transparent; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.875rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted-foreground, oklch(0.62 0.008 85)); text-decoration: none; transition: color 0.2s, background 0.2s, border-color 0.2s; outline: none; } .ds-nav-link::before { content: ''; width: 6px; height: 6px; border-radius: 9999px; background: var(--primary, oklch(0.72 0.12 78)); opacity: 0; transition: opacity 0.2s; flex-shrink: 0; } .ds-nav-link:hover { color: var(--foreground, oklch(0.97 0.004 90)); background: var(--muted, oklch(0.205 0.006 85)); } .ds-nav-link:focus-visible { outline: 2px solid var(--ring, oklch(0.72 0.12 78)); outline-offset: -2px; } .ds-nav-link--active { color: var(--primary, oklch(0.72 0.12 78)); border-left-color: var(--primary, oklch(0.72 0.12 78)); } .ds-nav-link--active::before { opacity: 1; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat ruled container with 1px hairline border, sharp corners, no shadow.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-header\">Today's workout</div><div class=\"ds-card-content\">Card body content.</div></div>",
+      "css": ".ds-card { background: var(--card, oklch(0.135 0.005 85)); color: var(--card-foreground, oklch(0.97 0.004 90)); border: 1px solid var(--border, oklch(0.26 0.006 85)); border-radius: 0; padding: 16px; } .ds-card-header { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 500; line-height: 1.25; margin-bottom: 8px; } .ds-card-content { font-family: 'Geist', system-ui, sans-serif; font-size: 0.875rem; line-height: 1.5; }"
+    },
+    {
+      "name": "Wordmark",
+      "kind": "custom",
+      "refersTo": "wordmark",
+      "description": "Brand mark: bordered box with display 'M' plus tracked mono 'MYTHLETICS'.",
+      "html": "<span class=\"ds-wordmark\"><span class=\"ds-wordmark-m\">M</span><span class=\"ds-wordmark-text\">MYTHLETICS</span></span>",
+      "css": ".ds-wordmark { display: inline-flex; align-items: center; gap: 10px; } .ds-wordmark-m { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid var(--border, oklch(0.26 0.006 85)); background: var(--background, oklch(0.135 0.005 85)); font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; line-height: 1; color: var(--foreground, oklch(0.97 0.004 90)); } .ds-wordmark-text { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.875rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.25em; color: var(--foreground, oklch(0.97 0.004 90)); }"
+    },
+    {
+      "name": "Specimen Slider",
+      "kind": "custom",
+      "refersTo": "specimen-slider",
+      "description": "Custom range slider for the SpecimenHero weight axis. Gold fill track, circular gold thumb — the only round element in the system.",
+      "html": "<input type=\"range\" class=\"ds-specimen-slider\" min=\"300\" max=\"900\" step=\"1\" value=\"485\" aria-label=\"Font weight\" />",
+      "css": ".ds-specimen-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 2px; background: linear-gradient(to right, var(--primary, oklch(0.72 0.12 78)) 0%, var(--primary, oklch(0.72 0.12 78)) var(--fill, 50%), var(--border, oklch(0.26 0.006 85)) var(--fill, 50%), var(--border, oklch(0.26 0.006 85)) 100%); border: none; outline: none; cursor: pointer; } .ds-specimen-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 9999px; background: var(--primary, oklch(0.72 0.12 78)); border: none; } .ds-specimen-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 9999px; background: var(--primary, oklch(0.72 0.12 78)); border: none; } .ds-specimen-slider:focus-visible { outline: 2px solid var(--ring, oklch(0.72 0.12 78)); outline-offset: 4px; }"
+    },
+    {
+      "name": "Weight Readout",
+      "kind": "custom",
+      "refersTo": "weight-readout",
+      "description": "Display weight value in gold — the current font-weight axis value shown in the SpecimenHero.",
+      "html": "<span class=\"ds-weight-readout\">485</span>",
+      "css": ".ds-weight-readout { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.875rem; font-weight: 400; line-height: 1; color: var(--primary, oklch(0.72 0.12 78)); font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Glyph Grid",
+      "kind": "custom",
+      "refersTo": "glyph-grid",
+      "description": "12-column hairline-ruled texture grid of 62 glyphs. Decorative specimen alphabet rendered in the display face at the current weight.",
+      "html": "<div class=\"ds-glyph-grid\" role=\"img\" aria-label=\"The full specimen glyph set\"><span class=\"ds-glyph-grid-cell\">A</span><span class=\"ds-glyph-grid-cell\">B</span><span class=\"ds-glyph-grid-cell\">C</span></div>",
+      "css": ".ds-glyph-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--border, oklch(0.26 0.006 85)); background: var(--border, oklch(0.26 0.006 85)); } .ds-glyph-grid-cell { display: flex; aspect-ratio: 1; align-items: center; justify-content: center; background: var(--background, oklch(0.135 0.005 85)); font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.125rem; line-height: 1; color: color-mix(in oklch, var(--muted-foreground, oklch(0.62 0.008 85)), transparent 50%); }"
+    },
+    {
+      "name": "Section Label",
+      "kind": "custom",
+      "refersTo": "section-label",
+      "description": "Gold mono index number plus tracked uppercase heading. The section-introduction pattern used throughout the dashboard.",
+      "html": "<div class=\"ds-section-label\"><span class=\"ds-section-label-index\">01</span><span class=\"ds-section-label-heading\">THE SPECIMEN</span></div>",
+      "css": ".ds-section-label { display: flex; align-items: baseline; gap: 12px; } .ds-section-label-index { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.15em; color: var(--primary, oklch(0.72 0.12 78)); } .ds-section-label-heading { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.875rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.3em; color: var(--foreground, oklch(0.97 0.004 90)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Living Specimen",
+    "overview": "This is a type foundry made personal. Every surface in Mythletics reads like a working specimen sheet — near-black paper, ink-grey hairlines, and one gold foundry accent that appears only where it must. The dashboard is not a dashboard in the conventional sense; it is a foundry sheet of your training, where a giant letterform weights itself to your real numbers and the entire page is a typographic composition of your progress.\n\nThe aesthetic is high-contrast variable serif on dark ground: Bodoni Moda sets every display number and headline, Geist Mono sets every structural label in tracked uppercase caps, and Geist carries body text. Hierarchy comes from type scale alone — never from color weight or decorative flourish. There are no shadows, no gradients, no rounded corners. Depth is conveyed through tonal layering of near-black greys and 1px hairline rules that carve the page into ruled sections.\n\nThe visual world is deliberately restrained. Gold is used sparingly — a filled dot, a filled shape, raw text fill — and never as a border, stroke, outline, or gradient. The effect is one of quiet confidence: a dark sculptural surface where your real training data is the only ornament.",
+    "keyCharacteristics": [
+      "Near-black paper (oklch(0.135 0.005 85)) with ink-grey hairline rules and one gold accent (oklch(0.72 0.12 78))",
+      "High-contrast variable display serif (Bodoni Moda, weight 100–900) for all display and headline text",
+      "Tracked uppercase mono-caps (Geist Mono) for every structural label and section index",
+      "Hierarchy from type scale alone, never color weight",
+      "1px hairline borders, sharp corners (radius 0), flat fills, no shadows",
+      "Gold accent only as filled shapes or raw text fill — never as border, stroke, or gradient",
+      "Tonal layering of near-black greys for depth (background, card, popover, muted surfaces)"
+    ],
+    "rules": [
+      {
+        "name": "The Filled-Only Rule",
+        "body": "Gold accent appears only as filled shapes or raw text fill — never as a border, stroke, outline, or gradient. Its rarity and solidity are the point.",
+        "section": "colors"
+      },
+      {
+        "name": "The Hairline Rule",
+        "body": "All rules and borders are exactly 1px. Sharp corners, no radius, no shadows, flat fills only. Depth is carved by lines, not lifted by surfaces.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Face Rule",
+        "body": "Every number the athlete owns — streak, reps, time, sessions, weight — is set in the display face (Bodoni Moda). No other display font appears on the surface. The variable weight axis is the only knob; scale and weight carry all hierarchy.",
+        "section": "typography"
+      },
+      {
+        "name": "The Scale Rule",
+        "body": "Hierarchy comes from type scale alone, never from color weight. A larger size always means a higher level. Color is reserved for accent (gold) and de-emphasis (muted-foreground), never for emphasis.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces are flat at rest. No shadows appear at any state — hover, focus, active, or elevation. Depth is carved by tonal layering and ruled lines, never by lifting.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Bodoni Moda for every display number and headline. The variable weight axis (300–900) is the primary expressive tool.",
+      "Do use Geist Mono for every structural label — section indices, axis labels, navigation, status bars. Always uppercase, always tracked.",
+      "Do use 1px hairline borders to carve sections and create the ruled-sheet grid.",
+      "Do layer near-black greys (paper, muted, popover) to create depth without shadows.",
+      "Do use Foundry Gold sparingly — as a filled shape, a filled dot, or raw text fill. Its rarity is the point.",
+      "Do keep all corners sharp (radius 0). The visual language is rectangular and ruled.",
+      "Do let type scale carry hierarchy — larger always means more important, never a different color."
+    ],
+    "donts": [
+      "Don't use gold as a border, stroke, outline, or gradient. Gold is always a filled solid.",
+      "Don't add shadows, box-shadow, drop-shadow, or backdrop-blur to any element. Depth is tonal, not spatial.",
+      "Don't use rounded corners on any component. The one exception is the AxisControl slider thumb.",
+      "Don't introduce a second display font. Bodoni Moda is the only face for display and headline text.",
+      "Don't use color weight for hierarchy. Never make text bolder by changing its color — only by changing its scale.",
+      "Don't add gradients to backgrounds, text fills, or borders. Flat fills only.",
+      "Don't use decorative imagery or illustration. The typography is the ornament."
+    ]
+  }
+}

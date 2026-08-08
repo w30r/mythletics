@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils"
 
 type RecentSessionItem = {
   _id: string
+  workoutId?: string
+  name?: string
   meta: string
   rating: number | null
 }
@@ -43,12 +45,15 @@ export function RecentSessions({ items }: { items: RecentSessionItem[] }) {
   return (
     <div className="space-y-3">
       {sessions.map((s) => (
-        <div key={s._id} className="flex items-center justify-between border-b pb-2 last:border-0">
-          <div>
-            <p className="text-sm font-medium">Workout session</p>
+        <div key={s._id} className="flex items-center justify-between gap-3 border-b pb-2 last:border-0">
+          <Link
+            href={s.workoutId ? `/workout/${s.workoutId}` : "/workouts"}
+            className="group min-w-0 flex-1"
+          >
+            <p className="truncate text-sm font-medium group-hover:text-primary">{s.name || "Workout session"}</p>
             <p className="text-xs text-muted-foreground">{s.meta}</p>
-          </div>
-          <div className="flex items-center gap-1">
+          </Link>
+          <div className="flex shrink-0 items-center gap-1">
             {s.rating ? (
               <Badge variant="secondary">{s.rating}/10</Badge>
             ) : (
